@@ -50,7 +50,7 @@ USER node
 # Copy package.json so that package manager commands can be used.
 COPY package.json .
 COPY .env .
-COPY .env.production .
+# COPY .env.production .
 COPY ./public ./public
 
 
@@ -60,4 +60,5 @@ COPY --from=deps /usr/src/app/node_modules ./node_modules
 COPY --from=build /usr/src/app/.next ./.next
 
 # Run the application.
-CMD yarn start
+# CMD yarn start
+CMD ["yarn", "start", "-p", "3001"]

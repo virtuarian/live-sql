@@ -1,16 +1,16 @@
 // pages/api/upload.js
 
-import oracledb from 'oracledb';
+// import oracledb from 'oracledb';
 import { NextRequest, NextResponse } from 'next/server';
 // import { NextApiRequest, NextApiResponse } from 'next';
 import pool from '../../../lib/db'
 
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
+// export const config = {
+//   api: {
+//     bodyParser: false,
+//   },
+// };
 
 
 // wget https://download.oracle.com/otn_software/linux/instantclient/1912000/instantclient-basic-linux.x64-19.12.0.0.0dbru.zip

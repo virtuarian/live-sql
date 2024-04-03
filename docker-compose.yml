@@ -1,17 +1,12 @@
-version: '3'
-
 services:
   next-app:
-    container_name: next-app-prod
-    image: next-app-prod
+    container_name: live-sql-prod
+    image: live-sql-prod
     build:
       context: .
       dockerfile: Dockerfile.prod
-      args:
-        ENV_VARIABLE: ${ENV_VARIABLE}
-        NEXT_PUBLIC_ENV_VARIABLE: ${NEXT_PUBLIC_ENV_VARIABLE}
     volumes:
-      - ./docker/uploads:/usr/src/app/public/uploads
+      - ./opt/oracle/instantclient_19_12:/opt/oracle/instantclient_19_12
     restart: always
     ports:
-      - 3000:3001
+      - 3001:3001

@@ -158,7 +158,7 @@ const IndexPage = () => {
               <TableHead>
                 <TableRow className={classes.row}>
                   {queryResult.result.metaData.map((row: any, index: number) => (
-                    <TableCell style={{ textAlign: "center", padding: "5px", backgroundColor: "#f8f8f8", borderWidth: "1px", borderStyle: "solid", borderColor: "#f1f1f1" }}>{row.name}</TableCell>
+                    <TableCell key={index} style={{ textAlign: "center", padding: "5px", backgroundColor: "#f8f8f8", borderWidth: "1px", borderStyle: "solid", borderColor: "#f1f1f1" }}>{row.name}</TableCell>
                   ))}
                 </TableRow>
               </TableHead>
@@ -168,9 +168,9 @@ const IndexPage = () => {
                   : queryResult.result.rows
                 ).map((row: any, index: number) => (
                   // {queryResult.result.rows.map((row:any, index:number) => (
-                  <StyledTableRow className={classes.row}>
-                    {row.map((data: any, b: any) =>
-                      <StyledTableCell>{data}</StyledTableCell>
+                  <StyledTableRow key={index}  className={classes.row}>
+                    {row.map((data: any, index2: any) =>
+                      <StyledTableCell key={index2} >{data}</StyledTableCell>
                     )}
                   </StyledTableRow>
                 ))
