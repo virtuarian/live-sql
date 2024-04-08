@@ -15,6 +15,7 @@ import { withStyles, makeStyles } from '@mui/styles';
 import { TableVirtuoso, TableComponents } from 'react-virtuoso';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import Loading from '@/components/Loading';
+import TextEditor from '@/components/TextEditor';
 
 const useStyles = makeStyles({
   row: {
@@ -47,6 +48,9 @@ const IndexPage = () => {
 
   const [isRun, setRun] = useState<boolean>(false);
 
+
+  const [text, setText] = useState<string>("");
+
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
@@ -67,12 +71,10 @@ const IndexPage = () => {
   }, [queryResult]);
 
   useEffect(() => {
-    // console.log(resultData);
-    // if (queryResult.length > 0) {
-    //   const work = resultData.metaData.map((row:any, index:number) => ({ field: row.name, headerName: row.name, width: 150 }));
-    //   setDynamicColumns(work);
-    // }
-  }, [resultData]);
+    console.log(text);
+  }, [text]);
+
+
 
 
   const fetchData = async () => {
@@ -128,8 +130,9 @@ const IndexPage = () => {
     <div>
       {/* <textarea value={sqlQuery}  /> */}
 
+      <TextEditor onChange={(value:any)=>setSqlQuery(value)}></TextEditor>
 
-      <TextField
+      {/* <TextField
         id="outlined-multiline-static"
         label="Query"
         multiline
@@ -139,7 +142,8 @@ const IndexPage = () => {
         variant="outlined"
         value={sqlQuery}
         onChange={(e) => setSqlQuery(e.target.value)}
-      />
+      /> */}
+
       <Button
         variant="contained"
         onClick={() => fetchData()}

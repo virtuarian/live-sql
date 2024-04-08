@@ -49,7 +49,7 @@ node_modules
 dist
 dist-ssr
 *.local
-bk
+*bk
 public/uploads/*
 docker
 
