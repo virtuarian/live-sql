@@ -1,4 +1,7 @@
 
+@import "~tailwindcss/base";
+@import "~tailwindcss/components";
+@import "~tailwindcss/utilities";
 
 body {
   /* color: rgb(var(--foreground-rgb));
@@ -8,7 +11,7 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb)); */
-    margin: 5px;
+    margin: 2px;
     
 }
 
@@ -121,4 +124,8 @@ h2.fukidashi:after {
   100% {
     transform: rotate(360deg);
   }
+}
+
+.flex-only-basis-auto {
+  flex: 0 0 auto !important;
 }

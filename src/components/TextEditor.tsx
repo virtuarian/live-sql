@@ -23,11 +23,12 @@ const TextEditor: React.FC<EditorProps> = ({ onChange }) => {
   // return <div id="editor" style={{ height: "500px" }} />;
 
   return  <MonacoEditor
-
       width="800"
-      height="300px"
+      height="100%"
       defaultLanguage="sql"
-    //   theme="vs-dark"
+      className="border"
+      theme=""
+      defaultValue="select * from user_tables"
       options={{
         selectOnLineNumbers: true,
         fontSize: 18,
