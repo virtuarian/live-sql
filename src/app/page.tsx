@@ -55,17 +55,11 @@ const IndexPage = () => {
   const [queryResult, setQueryResult] = useState<any>([]);
   const [updateResult, setUpdateResult] = useState<string>("");
   const [errorMsg, setErrorMsg] = useState<string>('');
-  // const [resultData, setResultData] = useState<any>([]);
-
   const [isRun, setRun] = useState<boolean>(false);
-  // const [hRow, setHRow] = React.useState<number>(100);
-
-  const [text, setText] = useState<string>("");
-
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-
-  const [tableHeight,setTableHeight] = useState<number>(300);
+  const [isClient, setIsClient] = useState(false);
+  const classes = useStyles();
 
   const handleChangePage = (event: any, newPage: number) => {
     setPage(newPage);
@@ -76,15 +70,17 @@ const IndexPage = () => {
     setPage(0);
   };
 
-  const classes = useStyles();
-
-  const [isClient, setIsClient] = useState(false);
+  // const [hRow, setHRow] = React.useState<number>(100);
+  // const [text, setText] = useState<string>("");
+  // const [tableHeight,setTableHeight] = useState<number>(300);
+  // const [resultData, setResultData] = useState<any>([]);
 
   useEffect(() => {
     setIsClient(true);
   }, []);
 
   if (!isClient) {
+    //これがないと実行時にエラーがでる
     return null; // クライアント側でのみレンダリングするためにnullを返す
   }
 
@@ -99,7 +95,7 @@ const IndexPage = () => {
 
 
 
-  const fetchData = async (sql:string) => {
+  const fetchData = async (sql: string) => {
     try {
       // console.log(`execute: ${sqlQuery}`);
 
@@ -110,26 +106,37 @@ const IndexPage = () => {
       setQueryResult([]);
       setUpdateResult("");
 
-      let runSql = sql.split(";");
+      let workSql = sql.replace('\r\n', ''); //改行除去
+      let arySql = workSql.split(";");
+      let data = [];
 
-      const response = await fetch('/api/execute-sql', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({sqlQuery:runSql[0]}),
-      });
+      // console.log(arySql);
 
-      const data = await response.json();
+      for (let i = 0; i < arySql.length; i++) {
+        const runSql = arySql[i].trim();
+        // console.log(`check:${runSql}`);
+        if (runSql !== "" && runSql.slice(0, 2) !== "--") {
+          // console.log(`run:${runSql}`);
+          const response = await fetch('/api/execute-sql', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ sqlQuery: runSql }),
+          });
 
-      //エラー発生時
-      if (response.status === 500) {
-        // console.log(response);
-        setErrorMsg(data.error);
-        return;
+          data = await response.json();
+
+          //エラー発生時
+          if (response.status === 500) {
+            // console.log(response);
+            setErrorMsg(data.error);
+            return;
+          }
+        }
       }
 
-      console.log(data);
+      // console.log(data);
 
 
       //SELECT文の場合
@@ -148,7 +155,7 @@ const IndexPage = () => {
       // dynamicColumns =  data.result.metaData.map((row:any, index:number) => ({ field: row.name, headerName: row.name, width: 150 })) 
       // dynamicData =  await JSON.stringify(data.result.rows); 
     }
-    catch (error:any) {
+    catch (error: any) {
       if (error instanceof Error) {
         setErrorMsg(error.message);
       }
@@ -167,10 +174,10 @@ const IndexPage = () => {
   return (
     <div>
 
-    <Box sx={{ flexGrow: 1 }}>
-    <AppBar position="static">
-        <Toolbar >
-          {/* <IconButton 
+      <Box sx={{ flexGrow: 1 }}>
+        <AppBar position="static">
+          <Toolbar >
+            {/* <IconButton 
            size="large"
            edge="start"
            color="inherit"
@@ -178,17 +185,17 @@ const IndexPage = () => {
             sx={{mr:2}}>
               <MenuIcon/>
           </IconButton> */}
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          </Typography>
-          <Button
-            // variant="contained"
-            style={{height:"50px",  textAlign:"right"}} 
-            color="inherit"
-            onClick={() => fetchData(sqlQuery)}
-            disabled={isRun}
-          >Run</Button>
-        </Toolbar>
-      </AppBar>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            </Typography>
+            <Button
+              // variant="contained"
+              style={{ height: "50px", textAlign: "right" }}
+              color="inherit"
+              onClick={() => fetchData(sqlQuery)}
+              disabled={isRun}
+            >Run</Button>
+          </Toolbar>
+        </AppBar>
       </Box>
 
 
@@ -198,15 +205,15 @@ const IndexPage = () => {
         style={{ flexDirection: 'column', alignItems: 'center' }}
       >
 
-        <div id="editor"        
+        <div id="editor"
           className="flex-only-basis-auto"
-          style={{height:"200px" }}
+          style={{ height: "200px" }}
         >
-          <TextEditor onChange={(value:any)=>setSqlQuery(value)}></TextEditor>
+          <TextEditor onChange={(value: any) => setSqlQuery(value)}></TextEditor>
 
 
         </div>
- 
+
         {/* <TextField
           id="outlined-multiline-static"
           label="Query"
@@ -220,24 +227,24 @@ const IndexPage = () => {
         /> */}
 
         {/* <div style={{ color: "red", margin:"10px" }} > */}
-        
+
 
         <VerticalResizeHandle
           id="vblock-separator"
           className="resize-separator-horizontal flex-only-basis-auto"
-          // onMouseResize={(e,element,newPxHeight)=>console.log(newPxHeight)}
+        // onMouseResize={(e,element,newPxHeight)=>console.log(newPxHeight)}
         />
 
-        <div className="" style={{ flex: 'auto'}}>
+        <div className="" style={{ flex: 'auto' }}>
 
           <div className="text-color-red-100">{errorMsg}</div>
-          <div style={{ color: "black", margin:"10px" }}>{updateResult}</div>
+          <div style={{ color: "black", margin: "10px" }}>{updateResult}</div>
 
           {queryResult.length !== 0 && (
 
             <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-              <TableContainer style={{height:"300px"}}>
-                <Table  style={{borderWidth: "1px", borderStyle: "solid", borderColor: "#f7f7f7" }} stickyHeader aria-label="sticky table">
+              <TableContainer style={{ height: "300px" }}>
+                <Table style={{ borderWidth: "1px", borderStyle: "solid", borderColor: "#f7f7f7" }} stickyHeader aria-label="sticky table">
                   <TableHead>
                     <TableRow className={classes.row}>
                       {queryResult.result.metaData.map((row: any, index: number) => (
@@ -251,9 +258,9 @@ const IndexPage = () => {
                       : queryResult.result.rows
                     ).map((row: any, index: number) => (
                       // {queryResult.result.rows.map((row:any, index:number) => (
-                      <StyledTableRow key={index}  className={classes.row}>
+                      <StyledTableRow key={index} className={classes.row}>
                         {row.map((data: any, index2: any) =>
-                          <StyledTableCell key={index2} style={{padding:"2px"}}>{data}</StyledTableCell>
+                          <StyledTableCell key={index2} style={{ padding: "2px" }}>{data}</StyledTableCell>
                         )}
                       </StyledTableRow>
                     ))

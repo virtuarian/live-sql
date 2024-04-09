@@ -53,14 +53,19 @@ export async function POST(req: NextRequest, res:NextResponse) {
 
     // const sqlQuery = await body.sqlQuery;
 
-    const result = await connection.execute(sqlQuery);
+    // const result = await connection.execute(sqlQuery);
 
+    console.log(sqlQuery);
+
+    const result = await connection.execute(sqlQuery,{}, {autoCommit: true})
+    
     // 結果をJSON形式で返す
     // res.status(200).json(result.rows);
     return NextResponse.json({ result:  result }, {status: 200});
 
   } catch (error:any) {
     if (error instanceof Error) { 
+      console.log(error.message);
       // console.error('Error executing Oracle SQL query:', error);
       // res.status(500).json({ error: 'Error executing SQL query' });
       return NextResponse.json(
