@@ -60,7 +60,7 @@ const IndexPage = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [isClient, setIsClient] = useState(false);
   const classes = useStyles();
-
+  let dataType: any[] = [];
   const handleChangePage = (event: any, newPage: number) => {
     setPage(newPage);
   };
@@ -106,7 +106,7 @@ const IndexPage = () => {
       setQueryResult([]);
       setUpdateResult("");
 
-      let workSql = sql.replace('\r\n', ''); //改行除去
+      let workSql = sql.replace('\r\n', ' '); //改行除去
       let arySql = workSql.split(";");
       let data = [];
 
@@ -247,9 +247,15 @@ const IndexPage = () => {
                 <Table style={{ borderWidth: "1px", borderStyle: "solid", borderColor: "#f7f7f7" }} stickyHeader aria-label="sticky table">
                   <TableHead>
                     <TableRow className={classes.row}>
-                      {queryResult.result.metaData.map((row: any, index: number) => (
+                      {/* {queryResult.result.metaData.map((row: any, index: number) => (
                         <TableCell key={index} style={{ textAlign: "center", padding: "5px", backgroundColor: "#f8f8f8", borderWidth: "1px", borderStyle: "solid", borderColor: "#f1f1f1" }}>{row.name}</TableCell>
-                      ))}
+                      ))} */}
+                      {queryResult.result.metaData.map((row: any, index: number) => {
+                        dataType.push(row.dbTypeName);//データ型を格納
+                        return (
+                          <TableCell key={index} style={{ textAlign: "center", padding: "5px", backgroundColor: "#f8f8f8", borderWidth: "1px", borderStyle: "solid", borderColor: "#f1f1f1" }}>{row.name}</TableCell>
+                        )
+                      })}
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -259,8 +265,11 @@ const IndexPage = () => {
                     ).map((row: any, index: number) => (
                       // {queryResult.result.rows.map((row:any, index:number) => (
                       <StyledTableRow key={index} className={classes.row}>
-                        {row.map((data: any, index2: any) =>
+                        {/* {row.map((data: any, index2: any) =>
                           <StyledTableCell key={index2} style={{ padding: "2px" }}>{data}</StyledTableCell>
+                        )} */}
+                        {row.map((data: any, index2: any) =>
+                          <StyledTableCell key={index2} style={{ padding: "2px" ,textAlign: (dataType[index2] === 'NUMBER' ? 'right' : 'left') }} >{data}</StyledTableCell>
                         )}
                       </StyledTableRow>
                     ))
