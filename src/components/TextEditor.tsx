@@ -1,5 +1,6 @@
+'use client';
 import React, { useEffect, useRef, useState } from "react";
-import 'monaco-sql-languages/esm/languages/mysql/mysql.contribution';
+// import 'monaco-sql-languages/esm/languages/mysql/mysql.contribution';
 // import 'monaco-sql-languages/esm/languages/flink/flink.contribution';
 // import 'monaco-sql-languages/esm/languages/spark/spark.contribution';
 // import 'monaco-sql-languages/esm/languages/hive/hive.contribution';

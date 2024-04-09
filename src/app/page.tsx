@@ -78,14 +78,24 @@ const IndexPage = () => {
 
   const classes = useStyles();
 
-  useEffect(() => {
-    // console.log(queryResult);
-    // setResultData(queryResult.result)
-  }, [queryResult]);
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
-    console.log(text);
-  }, [text]);
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) {
+    return null; // クライアント側でのみレンダリングするためにnullを返す
+  }
+
+  // useEffect(() => {
+  //   // console.log(queryResult);
+  //   // setResultData(queryResult.result)
+  // }, [queryResult]);
+
+  // useEffect(() => {
+  //   console.log(text);
+  // }, [text]);
 
 
 
@@ -253,7 +263,13 @@ const IndexPage = () => {
 
               </TableContainer>
               <TablePagination
-                rowsPerPageOptions={[5, 10, 25, 100]}
+                labelRowsPerPage="表示件数:"
+                rowsPerPageOptions={[
+                  { label: '10件', value: 10 },
+                  { label: '50件', value: 50 },
+                  { label: '100件', value: 100 },
+                  { label: '全て', value: queryResult.result.rows.length }
+                ]}
                 component="div"
                 count={queryResult.result.rows.length}
                 rowsPerPage={rowsPerPage}

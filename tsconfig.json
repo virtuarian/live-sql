@@ -20,8 +20,8 @@
     "paths": {
       "@/*": ["./src/*"]
     },
-    "typeRoots": ["./node_modules/@types", "./"],
-    "types": ["monaco-editor/esm/vs/editor/editor.api"]
+    // "typeRoots": ["./node_modules/@types", "./"],
+    // "types": ["monaco-editor/esm/vs/editor/editor.api"]
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]
